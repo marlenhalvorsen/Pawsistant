@@ -1,0 +1,41 @@
+﻿@page "/login"
+@inject ClientAuthService AuthService
+@inject NavigationManager NavigationManager
+
+<h3>Login</h3>
+
+<EditForm Model="@loginDto" OnValidSubmit="LoginAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" class="form-control" @bind-Value="loginDto.Email" />
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <InputText id="password" class="form-control" @bind-Value="loginDto.Password" type="password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
+
+@code {
+    private LoginDTO loginDto = new LoginDTO();
+
+    private async Task LoginAsync()
+    {
+        var success = await AuthService.LoginAsync(loginDto);
+        if (success)
+        {
+            // Navigate to a protected page
+            NavigationManager.NavigateTo("/protected");
+        }
+        else
+        {
+            // Handle login failure
+            Console.WriteLine("Login failed");
+        }
+    }
+}

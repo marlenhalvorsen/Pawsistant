@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pawsistant", "Pawsistant\Pawsistant.csproj", "{CE904DCD-DD6F-4A05-B407-4A535DAB605A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawsistantAPI", "PawsistantAPI\PawsistantAPI.csproj", "{F54E2F72-2A5A-4CE5-952E-5616CFE86141}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Shared", "YourApp.Shared\Library.Shared.csproj", "{3E9ADFB8-A231-456A-827D-161D2A243093}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE904DCD-DD6F-4A05-B407-4A535DAB605A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE904DCD-DD6F-4A05-B407-4A535DAB605A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE904DCD-DD6F-4A05-B407-4A535DAB605A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE904DCD-DD6F-4A05-B407-4A535DAB605A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F54E2F72-2A5A-4CE5-952E-5616CFE86141}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F54E2F72-2A5A-4CE5-952E-5616CFE86141}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F54E2F72-2A5A-4CE5-952E-5616CFE86141}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F54E2F72-2A5A-4CE5-952E-5616CFE86141}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E9ADFB8-A231-456A-827D-161D2A243093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E9ADFB8-A231-456A-827D-161D2A243093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E9ADFB8-A231-456A-827D-161D2A243093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E9ADFB8-A231-456A-827D-161D2A243093}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
