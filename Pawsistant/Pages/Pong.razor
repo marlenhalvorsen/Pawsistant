@@ -1,0 +1,24 @@
+﻿@page "/pong"
+
+@inject HttpClient Http
+
+<h3>Server response:</h3>
+<p>@serverMessage</p>
+
+@code {
+    string serverMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Calls https://localhost:7213/api/test/ping
+            serverMessage = await Http.GetStringAsync("api/test/ping");
+
+        }
+        catch (Exception ex)
+        {
+            serverMessage = $"Fejl: {ex.Message}";
+        }
+    }
+}

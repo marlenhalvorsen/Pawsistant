@@ -1,0 +1,6 @@
+@PawsistantAPI_HostAddress = http://localhost:5219
+
+GET {{PawsistantAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
