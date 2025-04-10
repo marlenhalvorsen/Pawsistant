@@ -1,6 +1,9 @@
 ﻿@page "/login"
-@inject ClientAuthService AuthService
+@using Library.Shared.Auth
+@using Pawsistant.Services.Auth
+@inject IClientAuthService AuthService
 @inject NavigationManager NavigationManager
+
 
 <h3>Login</h3>
 

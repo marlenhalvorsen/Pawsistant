@@ -3,9 +3,9 @@ using System.Net.Http.Json;
 using Blazored.LocalStorage;
 
 using System.IdentityModel.Tokens.Jwt;
-using Pawsistant.Services.Authentication;
+using Microsoft.AspNetCore.Components.Authorization;
 
-namespace YourApp.Client.Services.Authentication
+namespace Pawsistant.Services.Auth
 {
     public class ClientAuthService : IClientAuthService
     {
@@ -35,7 +35,7 @@ namespace YourApp.Client.Services.Authentication
             await _localStorage.SetItemAsync("jwt", JwtToken);
             await _localStorage.SetItemAsync("email", Email);
 
-            await _authStateProvider.NotifyUserAuthentication();
+            _authStateProvider.NotifyUserAuthentication(JwtToken);
             return true;
         }
 
@@ -47,7 +47,7 @@ namespace YourApp.Client.Services.Authentication
 
         public async Task<HttpRequestMessage?> CreateAuthorizedRequest(HttpMethod method, string url)
         {
-            var jwt = await _localStorage.GetItemAsync("jwt");
+            var jwt = await _localStorage.GetItemAsync<string>("jwt");
             if (string.IsNullOrWhiteSpace(jwt)) return null;
 
             var request = new HttpRequestMessage(method, url);
@@ -57,7 +57,7 @@ namespace YourApp.Client.Services.Authentication
 
         public async Task<bool> IsLoggedInAsync()
         {
-            var jwt = await _localStorage.GetItemAsync("jwt");
+            var jwt = await _localStorage.GetItemAsync<string>("jwt");
             return !string.IsNullOrWhiteSpace(jwt) && !_authStateProvider.IsTokenExpired(jwt);
         }
 
@@ -68,7 +68,7 @@ namespace YourApp.Client.Services.Authentication
             JwtToken = string.Empty;
             Email = string.Empty;
 
-            await _authStateProvider.NotifyUserLogout();
+             _authStateProvider.NotifyUserLogout();
         }
     }
 }
