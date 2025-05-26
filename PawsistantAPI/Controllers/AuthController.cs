@@ -69,7 +69,8 @@ public class AuthController : ControllerBase
 
         var user = new ApplicationUser
         {
-            Email = dto.Email
+            Email = dto.Email,
+            Role = "User"
         };
 
         user.PasswordHash = _hasher.HashPassword(user, dto.Password);
