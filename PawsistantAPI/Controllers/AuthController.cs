@@ -60,6 +60,7 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDTO dto)
     {
+        try { 
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
@@ -76,6 +77,12 @@ public class AuthController : ControllerBase
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
         return Ok("User registered succesfully.");
-        
+        }
+        catch (Exception ex)
+        {
+            // Midlertidig fejl-log
+            return StatusCode(500, $"Server error: {ex.Message}");
+        }
+
     }
 }
