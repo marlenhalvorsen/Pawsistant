@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Pawsistant.Services.Auth
+namespace Pawsistant.Service.Auth
 {
     public interface IClientAuthService
     {

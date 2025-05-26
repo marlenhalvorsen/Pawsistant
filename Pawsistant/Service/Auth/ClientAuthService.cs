@@ -5,7 +5,7 @@ using Blazored.LocalStorage;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace Pawsistant.Services.Auth
+namespace Pawsistant.Service.Auth
 {
     public class ClientAuthService : IClientAuthService
     {
