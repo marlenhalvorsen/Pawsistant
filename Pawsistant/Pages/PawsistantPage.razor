@@ -1,9 +1,47 @@
 ﻿@page "/pawsistantPage"
+@using Library.Shared.Model;
+@using Pawsistant.Components;
+@using System.ComponentModel.DataAnnotations;
 
-<h3>Pawsistant</h3>
+<h3>Tell med about your dog</h3>
+
+<EditForm Model="@dog" OnValidSubmit="@(() => chatStarted = true)">
+	<DataAnnotationsValidator/>
+	<ValidationSummary />
+
+	<div class="mb-2">
+		<label>Name of dog:</label>
+		<InputText @bind-Value="dog.Name" class="form-control"/>
+	</div>
+
+	<div class="mb-2">
+		<label>Breed:</label>
+		<InputText @bind-Value="dog.Breed" class="form-control" />
+	</div>
+
+	<div class="mb-2">
+		<label>Age:</label>
+		<InputNumber @bind-Value="dog.Age" class="form-control" />
+	</div>
+	<div class="mb-2">
+		<label>Description:</label>
+		<InputTextArea @bind-Value="dog.Description" class="form-control" />
+	</div>
+
+	<button type="submit" class="btn btn-primary">Start conversation</button>
+
+</EditForm>
+
+@if(chatStarted)
+{
+	<DogChat Dog="dog" />
+}
+
+
 
 
 
 @code {
-
+	private Dog dog = new();
+	private bool chatStarted = false;
 }
