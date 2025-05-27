@@ -1,0 +1,56 @@
+﻿@using Library.Shared.Model
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components
+
+<!-- Formular med data-binding til hundeobjektet -->
+<EditForm Model="@Dog" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <!-- Hundens navn -->
+    <div class="mb-2">
+        <label>Name of dog:</label>
+        <InputText @bind-Value="Dog.Name" class="form-control" />
+    </div>
+
+    <!-- Race -->
+    <div class="mb-2">
+        <label>Breed:</label>
+        <InputText @bind-Value="Dog.Breed" class="form-control" />
+    </div>
+
+    <!-- Alder -->
+    <div class="mb-2">
+        <label>Age:</label>
+        <InputNumber @bind-Value="Dog.Age" class="form-control" />
+    </div>
+
+    <!-- Beskrivelse -->
+    <div class="mb-2">
+        <label>Description:</label>
+        <InputTextArea @bind-Value="Dog.Description" class="form-control" />
+    </div>
+
+    <!-- Knap til at sende -->
+    <button type="submit" class="btn btn-primary">Start conversation</button>
+</EditForm>
+
+@code {
+    // Parameter: Vi modtager en Dog-model fra den side, der bruger komponenten
+    [Parameter]
+    public Dog Dog { get; set; } = new();
+
+    // Parameter: Vi sender et callback tilbage når brugeren trykker "submit"
+    [Parameter]
+    public EventCallback OnSubmit { get; set; }
+
+    // Når formularen indsendes, kalder vi callback
+    private async Task HandleSubmit()
+    {
+        if (OnSubmit.HasDelegate)
+        {
+            await OnSubmit.InvokeAsync();
+        }
+    }
+}
