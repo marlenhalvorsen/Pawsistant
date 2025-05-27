@@ -2,9 +2,9 @@ name: .NET Build & Test
 
 on:
   push:
-    branches: [ main ]   #Run this workflow when code is pushed to the main branch
+    branches: [ master ]   #Run this workflow when code is pushed to the main branch
   pull_request:
-    branches: [ main ]  #Also run workflow when there are PR targetin "Main"
+    branches: [ master ]  #Also run workflow when there are PR targetin "Main"
 
 jobs:
   build:
