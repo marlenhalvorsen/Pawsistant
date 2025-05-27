@@ -1,4 +1,4 @@
-![Build Status](https://img.shields.io/github/actions/workflow/status/marlenhalvorsen/Pawsistant/dotnet.yml?label=.NET%20Build&style=for-the-badge)
+![.NET Build & Test](https://github.com/marlenhalvorsen/Pawsistant/actions/workflows/dotnet.yml/badge.svg)
 
 Pawsistant is a full-stack web application built with Blazor WebAssembly (frontend) and ASP.NET Core (backend), designed to help dog owners get personalized training tips through AI-powered chat.
 
