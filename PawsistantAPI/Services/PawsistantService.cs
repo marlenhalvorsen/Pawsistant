@@ -1,6 +1,6 @@
 ﻿namespace PawsistantAPI.Services
 {
-    public interface IAiChatServiceInterface
+    public class PawsistantService
     {
     }
 }
