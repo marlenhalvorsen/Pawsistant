@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Pawsistant.Service.Auth
+
 {
     public class ClientAuthService : IClientAuthService
     {

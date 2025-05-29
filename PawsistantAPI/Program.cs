@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+ï»¿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>();
 builder.Services.AddScoped<IPawsistantService, PawsistantService>();
 builder.Services.AddScoped<IAiChatProviderAdapter, OpenRouterChatProviderAdapter>();
+
 
 builder.Services.AddCors(options =>
 {
@@ -65,7 +66,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowBlazorClient"); // Denne SKAL komme før UseAuthorization()
+app.UseCors("AllowBlazorClient"); // Denne SKAL komme fÃ¸r UseAuthorization()
+
 
 // Use authentication and authorization for the JWT
 app.UseAuthentication();

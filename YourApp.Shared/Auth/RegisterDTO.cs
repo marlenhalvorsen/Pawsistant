@@ -10,6 +10,7 @@ namespace Library.Shared.Auth
 
         [Required]
         [MinLength(1, ErrorMessage = "Password must be at least 1 character long.")]
+
         public string Password { get; set; } = string.Empty;
 
         [Required]

@@ -10,6 +10,7 @@ using Library.Shared.Model;
 using Microsoft.EntityFrameworkCore;
 
 
+
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
@@ -23,6 +24,7 @@ public class AuthController : ControllerBase
         _context = context;
         _hasher = hasher;
     }
+
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDTO model)
     {
@@ -86,4 +88,5 @@ public class AuthController : ControllerBase
         }
 
     }
+
 }

@@ -9,6 +9,7 @@ namespace PawsistantAPI.Controllers
     {
         [HttpGet("ping")]
         ///[Authorize]  // Only accessible with a valid JWT token
+
         public IActionResult Ping()
         {
             return Ok("Pong from server!");

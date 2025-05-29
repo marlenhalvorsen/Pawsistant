@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Pawsistant.Service.Auth
+
 {
     public class CustomAuthStateProvider : AuthenticationStateProvider
     {

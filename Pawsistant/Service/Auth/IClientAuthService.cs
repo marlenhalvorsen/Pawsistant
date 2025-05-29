@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Pawsistant.Service.Auth
+
 {
     public interface IClientAuthService
     {
