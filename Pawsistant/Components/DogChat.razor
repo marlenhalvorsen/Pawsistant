@@ -32,7 +32,6 @@ else
 
 	private List<ChatMessage> ChatMessages = new();
 	private string userInput = string.Empty;
-	private DateTime dateTime;
 
 	protected override void OnParametersSet()
 	{
@@ -42,7 +41,7 @@ else
 				{
 					Role = "system",
 					Content = $"You are an experienced dogtrainer. The dog name is {Dog.Name}, is {Dog.Age} year old. Challenges: {Dog.Description}.",
-					DateTime = dateTime
+					DateTime = DateTime.UtcNow
 				});
 		}
 	}
@@ -56,14 +55,14 @@ else
 			{
 				Role = "user",
 				Content = userInput,
-				DateTime = dateTime
+				DateTime = DateTime.UtcNow
 			};
 
 		ChatMessages.Add(userMessage);
 
 		try
 		{
-			var response = await httpClient.PostAsJsonAsync("api/pawsistantage/chat", userMessage);
+			var response = await httpClient.PostAsJsonAsync("api/pawsistantpage/chat", userMessage);
 
 			if(response.IsSuccessStatusCode)
 			{

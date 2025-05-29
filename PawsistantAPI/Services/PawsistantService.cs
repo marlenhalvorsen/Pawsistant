@@ -15,7 +15,7 @@ namespace PawsistantAPI.Services
         }
         public async Task<ChatMessage> GetResponseAsync(ChatMessage userMessage)
         {        
-            return await _IAiChatProviderAdapter.GetChatResponseAsync(userMessage);
+            return await _IAiChatProviderAdapter.GetChatMessageAsync(userMessage);
         }
     }
 }

@@ -16,7 +16,7 @@ public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context; 
     private readonly IPasswordHasher<ApplicationUser> _hasher;
-    private readonly ILogger _logger;
+    //private readonly ILogger _logger;
 
     public AuthController(AppDbContext context, IPasswordHasher<ApplicationUser> hasher)
     {
