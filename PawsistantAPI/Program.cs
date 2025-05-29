@@ -6,14 +6,19 @@ using PawsistantAPI.Repository.config;
 using System.Text;
 using Library.Shared.Model;
 using Microsoft.AspNetCore.Identity;
+using PawsistantAPI.Services.Interfaces;
+using PawsistantAPI.Services;
+using PawsistantAPI.Adapters.Interfaces;
+using PawsistantAPI.Adapters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>(); // 👈 DENNE LINJE
-
+builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>();
+builder.Services.AddScoped<IPawsistantService, PawsistantService>();
+builder.Services.AddScoped<IAiChatProviderAdapter, OpenRouterChatProviderAdapter>();
 
 builder.Services.AddCors(options =>
 {

@@ -1,5 +1,6 @@
 ﻿@using Library.Shared.Model;
 @using System.ComponentModel.DataAnnotations;
+@inject HttpClient httpClient; 
 
 
 @if (Dog == null)
@@ -51,22 +52,46 @@ else
 		if (string.IsNullOrWhiteSpace(userInput))
 			return;
 
-		ChatMessages.Add(new ChatMessage
+		var userMessage = new ChatMessage
 			{
 				Role = "user",
 				Content = userInput,
 				DateTime = dateTime
-			});
+			};
 
-		var response = $"Godt spørgsmål om {Dog?.Name}! Det lyder som noget vi kan træne.";
+		ChatMessages.Add(userMessage);
 
-		ChatMessages.Add(new ChatMessage
+		try
+		{
+			var response = await httpClient.PostAsJsonAsync("api/pawsistantage/chat", userMessage);
+
+			if(response.IsSuccessStatusCode)
 			{
-				Role = "assistant",
-				Content = response,
-				DateTime = dateTime
-
-			});
+				var aiMessage = await response.Content.ReadFromJsonAsync<ChatMessage>();
+				if (aiMessage!=null)
+				{
+					ChatMessages.Add(aiMessage);
+				}
+			}
+			else
+			{
+				ChatMessages.Add(new ChatMessage
+					{
+						Role = "assistant",
+						Content = "Sorry, i couldn't reach the AI service",
+						DateTime = DateTime.UtcNow
+					});
+			}
+		}
+		catch (Exception ex)
+		{
+			ChatMessages.Add(new ChatMessage
+				{
+					Role = "assistant",
+					Content = $"Error: {ex.Message}",
+					DateTime = DateTime.UtcNow
+				});
+		}
 		userInput = String.Empty;
 	}
 }
