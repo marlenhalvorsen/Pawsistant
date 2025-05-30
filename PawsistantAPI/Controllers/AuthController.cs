@@ -4,12 +4,27 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Library.Shared.Auth;
+using PawsistantAPI.Repository.config;
+using Microsoft.AspNetCore.Identity;
+using Library.Shared.Model;
+using Microsoft.EntityFrameworkCore;
+
 
 
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
+    private readonly AppDbContext _context; 
+    private readonly IPasswordHasher<ApplicationUser> _hasher;
+    //private readonly ILogger _logger;
+
+    public AuthController(AppDbContext context, IPasswordHasher<ApplicationUser> hasher)
+    {
+        _context = context;
+        _hasher = hasher;
+    }
+
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDTO model)
     {
@@ -43,4 +58,35 @@ public class AuthController : ControllerBase
 
         return Unauthorized();
     }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterDTO dto)
+    {
+        try { 
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
+            return BadRequest("Email is already in use");
+
+        var user = new ApplicationUser
+        {
+            Email = dto.Email,
+            Role = "User"
+        };
+
+        user.PasswordHash = _hasher.HashPassword(user, dto.Password);
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+        return Ok("User registered succesfully.");
+        }
+        catch (Exception ex)
+        {
+            // Midlertidig fejl-log
+            return StatusCode(500, $"Server error: {ex.Message}");
+        }
+
+    }
+
 }

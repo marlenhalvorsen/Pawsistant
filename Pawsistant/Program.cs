@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Pawsistant;
 using Blazored.LocalStorage;
-using Pawsistant.Services.Auth;
+using Pawsistant.Service.Auth;
+
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

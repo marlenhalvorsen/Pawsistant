@@ -1,0 +1,27 @@
+﻿@page "/pawsistantPage"
+@using Library.Shared.Model;
+@using Pawsistant.Components;
+@using System.ComponentModel.DataAnnotations;
+
+<h3>Tell med about your dog</h3>
+
+<DogForm Dog="@dog" OnSubmit="StartChat" />
+
+@if(chatStarted)
+{
+	<DogChat Dog="dog" />
+}
+
+
+
+
+
+@code {
+	private Dog dog = new();
+	private bool chatStarted = false;
+
+	private void StartChat()
+	{
+		chatStarted = true; 
+	}
+}

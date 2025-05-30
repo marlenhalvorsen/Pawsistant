@@ -9,7 +9,8 @@ namespace Library.Shared.Auth
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
+        [MinLength(1, ErrorMessage = "Password must be at least 1 character long.")]
+
         public string Password { get; set; } = string.Empty;
 
         [Required]

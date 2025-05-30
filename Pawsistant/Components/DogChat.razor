@@ -1,0 +1,97 @@
+﻿@using Library.Shared.Model;
+@using System.ComponentModel.DataAnnotations;
+@inject HttpClient httpClient; 
+
+
+@if (Dog == null)
+{
+	<p class="text-muted">No dog chosen.</p>
+}
+else
+{
+	<div class="mt-4">
+		<h4>Chat with AI about @Dog.Name 🐾</h4>
+		<div class="mb-3">
+			@foreach (var message in ChatMessages.Where(m => m.Role != "system"))
+			{
+				<div class="mb-2">
+					<strong>@(message.Role == "user" ? "You" : "AI"):</strong> @message.Content
+				</div>
+			}
+		</div>
+		<InputTextArea class="form-control" @bind-Value="userInput" />
+		<button class="btn btn-success mt-2" @onclick="SendMessage">Send</button>
+	</div>
+
+}
+
+
+@code {
+	[Parameter]
+	public Dog? Dog { get; set; }
+
+	private List<ChatMessage> ChatMessages = new();
+	private string userInput = string.Empty;
+
+	protected override void OnParametersSet()
+	{
+		if (Dog != null && !ChatMessages.Any())
+		{
+			ChatMessages.Add(new ChatMessage
+				{
+					Role = "system",
+					Content = $"You are an experienced dogtrainer. The dog name is {Dog.Name}, is {Dog.Age} year old. Challenges: {Dog.Description}.",
+					DateTime = DateTime.UtcNow
+				});
+		}
+	}
+
+	private async Task SendMessage()
+	{
+		if (string.IsNullOrWhiteSpace(userInput))
+			return;
+
+		var userMessage = new ChatMessage
+			{
+				Role = "user",
+				Content = userInput,
+				DateTime = DateTime.UtcNow
+			};
+
+		ChatMessages.Add(userMessage);
+
+		try
+		{
+			var response = await httpClient.PostAsJsonAsync("api/pawsistantpage/chat", userMessage);
+
+			if(response.IsSuccessStatusCode)
+			{
+				var aiMessage = await response.Content.ReadFromJsonAsync<ChatMessage>();
+				if (aiMessage!=null)
+				{
+					ChatMessages.Add(aiMessage);
+				}
+			}
+			else
+			{
+				ChatMessages.Add(new ChatMessage
+					{
+						Role = "assistant",
+						Content = "Sorry, i couldn't reach the AI service",
+						DateTime = DateTime.UtcNow
+					});
+			}
+		}
+		catch (Exception ex)
+		{
+			ChatMessages.Add(new ChatMessage
+				{
+					Role = "assistant",
+					Content = $"Error: {ex.Message}",
+					DateTime = DateTime.UtcNow
+				});
+		}
+		userInput = String.Empty;
+	}
+}
+

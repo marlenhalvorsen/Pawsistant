@@ -1,0 +1,61 @@
+﻿@page "/register"
+@using Library.Shared.Auth;
+@using Service.Auth;
+@inject IClientAuthService AuthService;
+@inject NavigationManager Navigation; 
+
+
+
+<h3>Register</h3>
+
+<EditForm Model="@_registerDto" OnValidSubmit="RegisterAsync">
+	<DataAnnotationsValidator/>
+	<ValidationSummary />
+	<div>
+		<label for="email">Email:</label>
+		<InputText id="email" class="form-control" @bind-Value="_registerDto.Email" />
+	</div>
+
+	<div>
+		<label for="password">Password:</label>
+		<InputText id="password" class="form-control" @bind-Value="_registerDto.Password" />
+	</div>
+
+	<div>
+		<label for="confirmPassword">Confirm Password:</label>
+		<InputText id="confirmPassword" class="form-control" @bind-Value="_registerDto.ConfirmPassword" />
+	</div>
+
+	<button type="submit" class="btn btn-success">Register</button>
+
+	@if (!string.IsNullOrEmpty(errorMessage))
+	{
+		<div class="alert alert-danger mt-2">@errorMessage</div>
+	}
+</EditForm>
+
+@code {
+	private RegisterDTO _registerDto = new();
+	private string errorMessage = string.Empty;
+
+	private async Task RegisterAsync()
+	{
+		errorMessage = String.Empty;
+
+		var success = await AuthService.RegisterAsync(_registerDto);
+		if (success)
+		{
+			await AuthService.LoginAsync(new LoginDTO
+				{
+					Email = _registerDto.Email,
+					Password = _registerDto.Password
+				});
+			Navigation.NavigateTo("/pong");
+		}
+		else
+		{
+			errorMessage = "Registration failed. Please check your input or try again later";
+		}
+
+	}
+}

@@ -6,7 +6,8 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Pawsistant.Services.Auth
+namespace Pawsistant.Service.Auth
+
 {
     public class CustomAuthStateProvider : AuthenticationStateProvider
     {
