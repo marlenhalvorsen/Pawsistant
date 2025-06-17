@@ -37,11 +37,11 @@
 </EditForm>
 
 @code {
-    // Parameter: Vi modtager en Dog-model fra den side, der bruger komponenten
+    // Parameter: Modtager en Dog-model fra den side, der bruger komponenten
     [Parameter]
     public Dog Dog { get; set; } = new();
 
-    // Parameter: Vi sender et callback tilbage når brugeren trykker "submit"
+    // Parameter: Sender et callback tilbage når brugeren trykker "submit"
     [Parameter]
     public EventCallback OnSubmit { get; set; }
 

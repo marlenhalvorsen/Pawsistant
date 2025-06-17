@@ -10,8 +10,14 @@ using PawsistantAPI.Services.Interfaces;
 using PawsistantAPI.Services;
 using PawsistantAPI.Adapters.Interfaces;
 using PawsistantAPI.Adapters;
+using PawsistantAPI.Helpers;
+using DotNetEnv;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+//load secrets from .env file
+AppSecrets.LoadSecrets(builder);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -35,6 +41,11 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 
+//Extracting secrets from configuration to use in JWT setup
+var jwtSecretKey = builder.Configuration["Jwt:SecretKey"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+
 // JWT Authentication setup
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -45,10 +56,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKeyHere")),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)),
             ClockSkew = TimeSpan.Zero,  // Optional: remove default clock skew for token expiration
-            ValidIssuer = "YourIssuer", // E.g., "https://localhost:7213"
-            ValidAudience = "YourAudience" // E.g., "https://localhost:5000"
+            ValidIssuer = jwtIssuer, // E.g., "https://localhost:7213"
+            ValidAudience = jwtAudience // E.g., "https://localhost:5000"
         };
     });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

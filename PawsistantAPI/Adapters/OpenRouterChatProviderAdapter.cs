@@ -14,11 +14,19 @@ namespace PawsistantAPI.Adapters
 
         public OpenRouterChatProviderAdapter(IConfiguration config)
         {
-            _apiKey = config["OpenRouter:ApiKey"] ?? throw new ArgumentNullException("OpenRouter API key is missing.");
+            _apiKey = config["OpenRouter:ApiKey"];
+
+            if (string.IsNullOrWhiteSpace(_apiKey))
+            {
+                throw new InvalidOperationException("OpenRouter API key is missing or empty.");
+            }
+            Console.WriteLine($"OpenRouter API key loaded: '{_apiKey}'");
+
             _httpClient = new HttpClient();
         }
         public async Task<ChatMessage> GetChatMessageAsync(ChatMessage message)
         {
+
             var endpoint = "https://openrouter.ai/api/v1/chat/completions";
 
             var requestBody = new

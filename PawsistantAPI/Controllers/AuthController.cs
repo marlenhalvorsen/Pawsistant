@@ -8,6 +8,7 @@ using PawsistantAPI.Repository.config;
 using Microsoft.AspNetCore.Identity;
 using Library.Shared.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 
 
@@ -25,6 +26,7 @@ public class AuthController : ControllerBase
         _hasher = hasher;
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDTO model)
     {
@@ -59,6 +61,7 @@ public class AuthController : ControllerBase
         return Unauthorized();
     }
 
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDTO dto)
     {
