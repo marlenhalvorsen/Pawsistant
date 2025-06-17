@@ -10,6 +10,11 @@
 *.userosscache
 *.sln.docstates
 .env
+.env.*
+
+#Allow example files	
+!.env.example
+
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
