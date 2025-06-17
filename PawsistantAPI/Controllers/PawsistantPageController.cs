@@ -1,4 +1,5 @@
 ﻿using Library.Shared.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PawsistantAPI.Services.Interfaces;
 
@@ -15,10 +16,11 @@ namespace PawsistantAPI.Controllers
             _pawsistantService = pawsistantService;
         }
 
-
+        [AllowAnonymous]
         [HttpPost("chat")]
         public async Task<IActionResult> Chat([FromBody] ChatMessage message)
         {
+
             var aiResponse = await _pawsistantService.GetResponseAsync(message);
             return Ok(aiResponse);
         }
