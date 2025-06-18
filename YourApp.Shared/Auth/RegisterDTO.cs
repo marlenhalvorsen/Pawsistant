@@ -16,5 +16,11 @@ namespace Library.Shared.Auth
         [Required]
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; } = string.Empty;
+
+
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
     }
 }

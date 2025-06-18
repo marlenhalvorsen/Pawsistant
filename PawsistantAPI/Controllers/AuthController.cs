@@ -18,12 +18,14 @@ public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context; 
     private readonly IPasswordHasher<ApplicationUser> _hasher;
+    private readonly UserManager<ApplicationUser> _userManager;
     //private readonly ILogger _logger;
 
-    public AuthController(AppDbContext context, IPasswordHasher<ApplicationUser> hasher)
+    public AuthController(AppDbContext context, IPasswordHasher<ApplicationUser> hasher, UserManager<ApplicationUser> userManager)
     {
         _context = context;
         _hasher = hasher;
+        _userManager = userManager;
     }
 
     [AllowAnonymous]
@@ -69,20 +71,27 @@ public class AuthController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
-            return BadRequest("Email is already in use");
+        var existingUser = await _userManager.FindByEmailAsync(dto.Email);
+        if (existingUser == null)
+                return BadRequest(ModelState);
 
+        
         var user = new ApplicationUser
         {
+            UserName = dto.Email,
             Email = dto.Email,
-            Role = "User"
+            FirstName = dto.FirstName, 
+            LastName = dto.LastName
         };
 
-        user.PasswordHash = _hasher.HashPassword(user, dto.Password);
+            var result = await _userManager.CreateAsync(user, dto.Password);
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-        return Ok("User registered succesfully.");
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            await _userManager.AddToRoleAsync(user, "User");
+
+            return Ok("User registered successfully.");
         }
         catch (Exception ex)
         {

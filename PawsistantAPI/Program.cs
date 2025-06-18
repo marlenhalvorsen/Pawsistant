@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
-using System;
 using PawsistantAPI.Repository.config;
 using System.Text;
 using Library.Shared.Model;
@@ -11,8 +9,7 @@ using PawsistantAPI.Services;
 using PawsistantAPI.Adapters.Interfaces;
 using PawsistantAPI.Adapters;
 using PawsistantAPI.Helpers;
-using DotNetEnv;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,7 +71,7 @@ builder.Services.AddCors(options =>
 
 
 // JWT Authentication setup
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
