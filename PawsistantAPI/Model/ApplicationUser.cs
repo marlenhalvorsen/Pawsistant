@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
 
-namespace Library.Shared.Model
+namespace PawsistantAPI.Model
 {
     public class ApplicationUser : IdentityUser
     {

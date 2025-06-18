@@ -2,7 +2,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using PawsistantAPI.Repository.config;
 using System.Text;
-using Library.Shared.Model;
+using PawsistantAPI.Model;
 using Microsoft.AspNetCore.Identity;
 using PawsistantAPI.Services.Interfaces;
 using PawsistantAPI.Services;
@@ -17,19 +17,28 @@ var builder = WebApplication.CreateBuilder(args);
 //load secrets from .env file
 AppSecrets.LoadSecrets(builder);
 
+//DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//for role and identitymanagement
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
 
 builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>();
 builder.Services.AddScoped<IPawsistantService, PawsistantService>();
 builder.Services.AddScoped<IAiChatProviderAdapter, OpenRouterChatProviderAdapter>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenGenerator, TokenGenerator>();
 
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorClient", policy =>
     {
-        policy.WithOrigins("https://localhost:7222") // <-- din Blazor WebAssembly klient-url
+        policy.WithOrigins("https://localhost:7222") 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -37,7 +46,6 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
