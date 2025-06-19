@@ -2,7 +2,7 @@
 using Library.Shared.Auth;
 using PawsistantAPI.Repository.config;
 using Microsoft.AspNetCore.Authorization;
-using PawsistantAPI.Services;
+using PawsistantAPI.Services.Interfaces;
 using PawsistantAPI.Model;
 
 
@@ -11,10 +11,10 @@ using PawsistantAPI.Model;
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context; 
-    private readonly AuthService _authService;
+    private readonly IAuthService _authService;
     //private readonly ILogger _logger;
 
-    public AuthController(AppDbContext context, AuthService authService)
+    public AuthController(AppDbContext context, IAuthService authService)
     {
         _context = context;
         _authService = authService;

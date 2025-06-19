@@ -10,6 +10,7 @@ using PawsistantAPI.Adapters.Interfaces;
 using PawsistantAPI.Adapters;
 using PawsistantAPI.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using PawsistantAPI.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,31 +35,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenGenerator, TokenGenerator>();
 
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowBlazorClient", policy =>
-    {
-        policy.WithOrigins("https://localhost:7222") 
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
-
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
 
 //Extracting secrets from configuration to use in JWT setup
 var jwtSecretKey = builder.Configuration["Jwt:SecretKey"];
@@ -105,6 +85,25 @@ builder.Services.AddAuthentication("Bearer")
 
     });
 
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+
+app.UseCors("AllowBlazorClient");
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+// Seed data for test
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await DbSeeder.SeedUsersAndRolesAsync(services);
+}
 
 // Use authentication and authorization for the JWT
 app.UseAuthentication();
