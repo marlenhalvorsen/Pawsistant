@@ -1,0 +1,28 @@
+﻿@inject HttpClient httpClient
+@inject NavigationManager navManager
+@inject IJSRuntime JS
+
+<button class="btn btn-link nav-link" @onclick="ConfirmLogout">
+    <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Log ud
+</button>
+
+
+@code {
+
+    private async Task ConfirmLogout()
+    {
+        var confirm = await JS.InvokeAsync<bool>("confirm", "Er du sikker på at du vil logge ud?");
+        if (confirm)
+        {
+            await Logout();
+        }
+
+    }
+    private async Task Logout()
+    {
+        await httpClient.PostAsync("api/auth/logout", null);
+
+        navManager.NavigateTo("/login", forceLoad: true);
+        
+    }
+}

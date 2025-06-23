@@ -24,16 +24,16 @@ namespace Pawsistant.Service.Auth
 
         public async Task<bool> LoginAsync(LoginDTO dto)
         {
-            var response = await _http.PostAsJsonAsync("api/auth/login", dto);
+            var response = await _http.PostAsJsonAsync("/api/auth/login", dto);
             if (!response.IsSuccessStatusCode) return false;
 
-            _authStateProvider.NotifyUserAuthentication(JwtToken);
+            _authStateProvider.NotifyUserAuthentication();
             return true;
         }
 
         public async Task<bool> RegisterAsync(RegisterDTO dto)
         {
-            var response = await _http.PostAsJsonAsync("api/auth/register", dto);
+            var response = await _http.PostAsJsonAsync("/api/auth/register", dto);
             return response.IsSuccessStatusCode;
         }
 
@@ -41,13 +41,13 @@ namespace Pawsistant.Service.Auth
 
         public async Task<bool> IsLoggedInAsync()
         {
-            var response = await _http.GetAsync("api/auth/me");
+            var response = await _http.GetAsync("/api/auth/me");
             return response.IsSuccessStatusCode;
         }
 
         public async Task LogoutAsync()
         {
-            var response = await _http.GetAsync("api/auth/logout", null);
+            var response = await _http.PostAsync("/api/auth/logout", null);
              _authStateProvider.NotifyUserLogout();
         }
     }

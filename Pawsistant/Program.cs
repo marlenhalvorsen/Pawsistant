@@ -12,7 +12,11 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 // Register HttpClient for API calls
 builder.Services.AddScoped(sp =>
-    new HttpClient { BaseAddress = new Uri("https://localhost:7213") });
+    new HttpClient 
+    { 
+        BaseAddress = new Uri("https://localhost:7213"),
+
+    });
 
 // Register LocalStorage service
 builder.Services.AddBlazoredLocalStorage();

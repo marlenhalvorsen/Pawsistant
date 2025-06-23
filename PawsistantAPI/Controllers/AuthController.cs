@@ -10,7 +10,7 @@ using PawsistantAPI.Model;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly AppDbContext _context; 
+    private readonly AppDbContext _context;
     private readonly IAuthService _authService;
     //private readonly ILogger _logger;
 
@@ -20,30 +20,30 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    [AllowAnonymous]
-    [HttpPost("login")]
-    public async Task <IActionResult> Login([FromBody] LoginDTO loginDto)
-    {
-        try
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
-            var token = await _authService.LoginAsync(loginDto);
-
-            // Put JWT as HTTP-only cookie
-            Response.Cookies.Append("X-Access-Token", token, new CookieOptions
+            try
             {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddMinutes(30)
-            });
+                var token = await _authService.LoginAsync(loginDto);
 
-            return Ok("Login Successful.");
+                // Put JWT as HTTP-only cookie
+                Response.Cookies.Append("X-Access-Token", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddMinutes(30)
+                });
+
+                return Ok(new { Message = "Login Successful.", Email = loginDto.Email });
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized($"Login failed: {ex.Message}");
+            }
         }
-        catch (Exception ex)
-        {
-            return Unauthorized($"Login failed: {ex.Message}");
-        }
-    }
 
     [AllowAnonymous]
     [HttpPost("register")]
@@ -58,16 +58,31 @@ public class AuthController : ControllerBase
 
             if (!result)
             {
-                return BadRequest("Registration failed"); 
+                return BadRequest("Registration failed");
             }
 
             return Ok(result);
         }
 
-        catch (Exception ex) 
+        catch (Exception ex)
         {
             return StatusCode(500, $"Server error: {ex.Message}");
         }
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        return Ok(new { Email = User.Identity?.Name });
+    }
+
+    [Authorize]
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("X-Access-Token");
+        return Ok("Logged out successfully");
     }
 
 }

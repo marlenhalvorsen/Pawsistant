@@ -51,8 +51,8 @@ namespace PawsistantAPI.Services
             };
 
             var result = await _userManager.CreateAsync(user, userDTO.Password);
-            if(!result.Succeeded)
-                throw new Exception("Failed to register user: " + string.Join(", ", result.Errors));
+            if (!result.Succeeded)
+                throw new Exception("Failed to register user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
 
             if (!await _roleManager.RoleExistsAsync("User"))
             {

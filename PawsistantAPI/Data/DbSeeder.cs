@@ -20,7 +20,7 @@ namespace PawsistantAPI.Data
                 }
             }
 
-            string adminEmail = "1@1";
+            string adminEmail = "1@1.dk";
             string adminPassword = "1";
 
             if (await userManager.FindByEmailAsync(adminEmail) == null)
@@ -29,10 +29,11 @@ namespace PawsistantAPI.Data
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
+                    EmailConfirmed = true,
                     FirstName = "Admin",
                     LastName = "Adminsen"
                 };
-                var result = await userManager.CreateAsync(adminUser);
+                var result = await userManager.CreateAsync(adminUser, adminPassword);
 
                 if (result.Succeeded)
                 {
@@ -41,7 +42,7 @@ namespace PawsistantAPI.Data
 
             }
 
-            string userEmail = "2@2";
+            string userEmail = "2@2.dk";
             string userPassword = "2";
 
             if (await userManager.FindByEmailAsync(userEmail) == null)
@@ -50,11 +51,12 @@ namespace PawsistantAPI.Data
                 {
                     UserName = userEmail,
                     Email = userEmail,
+                    EmailConfirmed = true,
                     FirstName = "NormalUser",
                     LastName = "User"
                 };
 
-                var result = await userManager.CreateAsync(normalUser);
+                var result = await userManager.CreateAsync(normalUser, userPassword);
 
                 if (result.Succeeded)
                 {
