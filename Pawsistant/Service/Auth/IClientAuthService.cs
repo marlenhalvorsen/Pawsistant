@@ -12,7 +12,6 @@ namespace Pawsistant.Service.Auth
 
         Task<bool> LoginAsync(LoginDTO dto);
         Task<bool> RegisterAsync(RegisterDTO dto);
-        Task<HttpRequestMessage?> CreateAuthorizedRequest(HttpMethod method, string url);
         Task<bool> IsLoggedInAsync();
         Task LogoutAsync();
     }

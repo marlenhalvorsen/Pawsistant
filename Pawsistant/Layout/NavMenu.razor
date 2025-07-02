@@ -1,4 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject HttpClient httpClient
+@inject NavigationManager navManager
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IJSRuntime JS
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Pawsistant</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -9,6 +14,13 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
+        <AuthorizeView>
+            <Authorized Context="auth">
+                <div class="nav-item px-3">
+                    <span class="nav-link">Hej, @auth.User.Identity.Name!</span>
+                </div>
+            </Authorized>
+        </AuthorizeView>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
@@ -24,6 +36,22 @@
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Login
             </NavLink>
         </div>
+        <AuthorizeView>
+            <Authorized>
+                <div class="nav-item px-3">
+                    <button class="btn btn-link nav-link" @onclick="ConfirmLogout">
+                        <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Log ud
+                    </button>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="login">
+                        <span class="bi bi-box-arrow-in-right" aria-hidden="true"></span> Log ind
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="register">
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Register
@@ -40,11 +68,25 @@
 
 @code {
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+    private async Task ConfirmLogout()
+    {
+        var confirm = await JS.InvokeAsync<bool>("confirm", "Er du sikker på at du vil logge ud?");
+        if (confirm)
+        {
+            await Logout();
+        }
+    }
+
+    private async Task Logout()
+    {
+        await httpClient.PostAsync("api/auth/logout", null);
+
+        navManager.NavigateTo("/login", forceLoad: true);
     }
 }

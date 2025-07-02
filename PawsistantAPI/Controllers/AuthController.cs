@@ -1,95 +1,89 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Library.Shared.Auth;
 using PawsistantAPI.Repository.config;
-using Microsoft.AspNetCore.Identity;
-using Library.Shared.Model;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-
+using PawsistantAPI.Services.Interfaces;
+using PawsistantAPI.Model;
 
 
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly AppDbContext _context; 
-    private readonly IPasswordHasher<ApplicationUser> _hasher;
+    private readonly AppDbContext _context;
+    private readonly IAuthService _authService;
     //private readonly ILogger _logger;
 
-    public AuthController(AppDbContext context, IPasswordHasher<ApplicationUser> hasher)
+    public AuthController(AppDbContext context, IAuthService authService)
     {
         _context = context;
-        _hasher = hasher;
+        _authService = authService;
     }
 
-    [AllowAnonymous]
-    [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginDTO model)
-    {
-        if (!ModelState.IsValid)
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
-            return BadRequest(ModelState); // Returns validation errors
-        }
-
-        // Check if user credentials are valid (you would check against a DB in a real scenario)
-        if (model.Email == "testuser@example.com" && model.Password == "password")
-        {
-            var claims = new[]
+            try
             {
-                new Claim(ClaimTypes.Name, model.Email),
-                // You can add more claims, e.g., roles, if needed
-            };
+                var token = await _authService.LoginAsync(loginDto);
+            Console.WriteLine($"Generated token: {token ?? "<null>"}");
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKeyHere"));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            // Put JWT as HTTP-only cookie
+            Response.Cookies.Append("X-Access-Token", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddMinutes(30)
+                });
 
-            var token = new JwtSecurityToken(
-                issuer: "YourIssuer",
-                audience: "YourAudience",
-                claims: claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: creds
-            );
-
-            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+                return Ok(new { Message = "Login Successful.", Email = loginDto.Email });
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized($"Login failed: {ex.Message}");
+            }
         }
-
-        return Unauthorized();
-    }
 
     [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDTO dto)
     {
-        try { 
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
-            return BadRequest("Email is already in use");
-
-        var user = new ApplicationUser
+        try
         {
-            Email = dto.Email,
-            Role = "User"
-        };
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        user.PasswordHash = _hasher.HashPassword(user, dto.Password);
+            var result = await _authService.RegisterUserAsync(dto);
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-        return Ok("User registered succesfully.");
+            if (!result)
+            {
+                return BadRequest("Registration failed");
+            }
+
+            return Ok(result);
         }
+
         catch (Exception ex)
         {
-            // Midlertidig fejl-log
             return StatusCode(500, $"Server error: {ex.Message}");
         }
+    }
 
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        return Ok(new { Email = User.Identity?.Name });
+    }
+
+    [Authorize]
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("X-Access-Token");
+        return Ok("Logged out successfully");
     }
 
 }

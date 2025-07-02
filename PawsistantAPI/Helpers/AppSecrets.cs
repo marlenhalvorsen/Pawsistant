@@ -12,9 +12,9 @@ namespace PawsistantAPI.Helpers
             //get values from .env
             var apiKey = Environment.GetEnvironmentVariable("OpenRouterApiKey");
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-            var jwtSecretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
-            var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
-            var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+            var jwtSecretKey = Environment.GetEnvironmentVariable("Jwt__SecretKey");
+            var jwtIssuer = Environment.GetEnvironmentVariable("Jwt__Issuer");
+            var jwtAudience = Environment.GetEnvironmentVariable("Jwt__Audience");
 
             //set values from .env into Configuration
             builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;

@@ -10,4 +10,5 @@ public class LoginDTO
 
     [Required]
     public string Password { get; set; }
+
 }
