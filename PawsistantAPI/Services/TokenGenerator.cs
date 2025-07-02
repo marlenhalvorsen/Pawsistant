@@ -41,6 +41,7 @@ namespace PawsistantAPI.Services
                 expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: creds
             );
+            Console.WriteLine($"Generated token: {token}");
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

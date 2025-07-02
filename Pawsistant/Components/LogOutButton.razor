@@ -1,13 +1,31 @@
-﻿@inject HttpClient httpClient
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+@inject HttpClient httpClient
 @inject NavigationManager navManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JS
 
-<button class="btn btn-link nav-link" @onclick="ConfirmLogout">
-    <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Log ud
-</button>
 
+@if (isLoggedIn)
+{
+    <button class="btn btn-link nav-link" @onclick="ConfirmLogout">
+        <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Log ud
+    </button>
+}
 
 @code {
+
+    private bool isLoggedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        isLoggedIn = user.Identity?.IsAuthenticated ?? false;
+        
+
+    }
 
     private async Task ConfirmLogout()
     {
@@ -21,8 +39,7 @@
     private async Task Logout()
     {
         await httpClient.PostAsync("api/auth/logout", null);
-
         navManager.NavigateTo("/login", forceLoad: true);
-        
     }
+   
 }

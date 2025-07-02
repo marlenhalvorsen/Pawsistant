@@ -21,7 +21,7 @@ namespace PawsistantAPI.Data
             }
 
             string adminEmail = "1@1.dk";
-            string adminPassword = "1";
+            string adminPassword = "Admin123!";
 
             if (await userManager.FindByEmailAsync(adminEmail) == null)
             {
@@ -43,7 +43,7 @@ namespace PawsistantAPI.Data
             }
 
             string userEmail = "2@2.dk";
-            string userPassword = "2";
+            string userPassword = "User123!";
 
             if (await userManager.FindByEmailAsync(userEmail) == null)
             {

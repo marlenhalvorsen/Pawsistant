@@ -14,12 +14,12 @@
 
     <div>
         <label for="email">Email:</label>
-        <InputText id="email" class="form-control" @bind-Value="loginDto.Email" />
+        <InputText id="email" class="form-control" @bind-value="loginDto.Email" />
     </div>
 
     <div>
         <label for="password">Password:</label>
-        <InputText id="password" class="form-control" @bind-Value="loginDto.Password" type="password" />
+        <InputText id="password" class="form-control" @bind-value="loginDto.Password" type="password" />
     </div>
 
     <button type="submit" class="btn btn-primary">Login</button>
@@ -34,7 +34,7 @@
         if (success)
         {
             // Navigate to a protected page
-            NavigationManager.NavigateTo("/protected");
+            NavigationManager.NavigateTo("/pawsistantPage");
         }
         else
         {

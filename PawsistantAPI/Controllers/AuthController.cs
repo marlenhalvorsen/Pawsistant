@@ -27,9 +27,10 @@ public class AuthController : ControllerBase
             try
             {
                 var token = await _authService.LoginAsync(loginDto);
+            Console.WriteLine($"Generated token: {token ?? "<null>"}");
 
-                // Put JWT as HTTP-only cookie
-                Response.Cookies.Append("X-Access-Token", token, new CookieOptions
+            // Put JWT as HTTP-only cookie
+            Response.Cookies.Append("X-Access-Token", token, new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
