@@ -60,5 +60,14 @@ namespace PawsistantTest
                 () => sut.GetResponseAsync(msg)
             );
         }
+
+        [TestMethod]
+
+        public async Task Ctor_NullAdapterThrows()
+        {
+            Assert.ThrowsException<ArgumentNullException>(
+                () => new PawsistantService(null!)
+                );
+        }
     }
 }
