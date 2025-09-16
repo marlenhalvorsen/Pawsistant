@@ -1,5 +1,4 @@
 ﻿using Library.Shared.Model;
-using Microsoft.AspNetCore.Http.HttpResults;
 using PawsistantAPI.Adapters.Interfaces;
 using PawsistantAPI.Services.Interfaces;
 
