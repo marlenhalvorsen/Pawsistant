@@ -24,7 +24,7 @@ namespace PawsistantAPI.Adapters
 
             var requestBody = new
             {
-                model = "mistralai/mistral-small-3.1-24b-instruct", // <-- This should match what OpenRouter lists as the model ID
+                model = "mistralai/mistral-small-3.1-24b-instruct", 
                 messages = new[]
                 {
                     new { role = "system", content = "You are a helpful dog training assistant." },
