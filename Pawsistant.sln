@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawsistantAPI", "Pawsistant
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Shared", "YourApp.Shared\Library.Shared.csproj", "{3E9ADFB8-A231-456A-827D-161D2A243093}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawsistantTest", "PawsistantTest\PawsistantTest.csproj", "{A319773D-5F36-40A0-9715-3789A1AD4B2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3E9ADFB8-A231-456A-827D-161D2A243093}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E9ADFB8-A231-456A-827D-161D2A243093}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E9ADFB8-A231-456A-827D-161D2A243093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A319773D-5F36-40A0-9715-3789A1AD4B2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A319773D-5F36-40A0-9715-3789A1AD4B2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A319773D-5F36-40A0-9715-3789A1AD4B2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A319773D-5F36-40A0-9715-3789A1AD4B2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,28 +2,35 @@ name: .NET Build & Test
 
 on:
   push:
-    branches: [ master ]   #Run this workflow when code is pushed to the main branch
+    branches: [ master ]
   pull_request:
-    branches: [ master ]  #Also run workflow when there are PR targetin "Main"
+    branches: [ master ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest #Job runs on a Ubuntu Linux VM hosted by GitHub
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code from GitHub
+    - name: Checkout
       uses: actions/checkout@v3
 
     - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v3 #Downloads and installs the correct .NET version
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
 
-    - name: Restore NuGet-packages
-      run: dotnet restore #Restore all packages declared in .csproj or .sln files
+    - name: Restore
+      run: dotnet restore Pawsistant.sln
 
-    - name: Build the solution
-      run: dotnet build --no-restore --configuration Release
+    - name: Build (Release)
+      run: dotnet build Pawsistant.sln --configuration Release --no-restore
 
-    - name: Run tests
-      run: dotnet test --no-build --verbosity normal #Runs all unitTest in the solution
+    - name: Test (PawsistantTest)
+      run: dotnet test ./PawsistantTest/PawsistantTest.csproj --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test_results.trx"
+
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: '**/TestResults/**/*.trx'
